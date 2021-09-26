@@ -1,84 +1,203 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title>Mall09</title>
-
-    <!-- un-comment this code to enable service worker
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('service-worker.js')
-          .then(() => console.log('service worker installed'))
-          .catch(err => console.log('Error', err));
-      }
-    </script>-->
-
-
-    <!-- compiled css output -->
-    <link href="css/ionic.app.css" rel="stylesheet">
-
-    <!-- ionic/angularjs js -->
-    <script src="lib/ionic/js/ionic.bundle.js"></script>
-
-    <!-- cordova script (this will be a 404 during development) -->
-    <script src="cordova.js"></script>
-
-    <!-- your app's js -->
-    <script src="js/app.js"></script>
-    <script src="js/config.js"></script>
-    <script src="js/route.js"></script>
-
-    <!--引导-->
-    <link href="css/guidePage/guidePage.css" rel="stylesheet">
-    <script src="areas/guidePage/guidePage_controller.js"></script>
-    <script src="areas/guidePage/guidePage_route.js"></script>
-    <script src="lib/jquery/dist/jquery.js"></script>
-    <!--导航-->
-    <script src="areas/tab/tab_controller.js"></script>
-    <script src="areas/tab/tab_service.js"></script>
-    <script src="areas/tab/tab_route.js"></script>
-    <!--首页-->
-    <link href="css/home/home.css" rel="stylesheet">
-    <script src="areas/home/home_controller.js"></script>
-    <script src="areas/home/home_route.js"></script>
-    <!--分类-->
-    <link href="css/category/category.css" rel="stylesheet">
-    <script src="areas/category/category_controller.js"></script>
-    <script src="areas/category/category_service.js"></script>
-    <script src="areas/category/category_route.js"></script>
-    <script src="lib/ionic-image-lazy-load/ionic-image-lazy-load.js"></script>
-    <!--列表-->
-    <link href="css/goodsList/goodsList.css" rel="stylesheet">
-    <script src="areas/goodsList/goodsList_controller.js"></script>
-    <script src="areas/goodsList/goodsList_service.js"></script>
-    <script src="areas/goodsList/goodsList_route.js"></script>
-    <!--详情-->
-    <link href="css/details/details.css" rel="stylesheet">
-    <script src="areas/details/details_controller.js"></script>
-    <script src="areas/details/details_service.js"></script>
-    <script src="areas/details/details_route.js"></script>
-    <!--公用的js-->
-    <script src="areas/common/indexdb.js"></script>
-    <script src="areas/common/common.js"></script>
-    <!--购物车-->
-    <link href="css/cart/cart.css" rel="stylesheet">
-    <script src="areas/cart/cart_controller.js"></script>
-    <script src="areas/cart/cart_service.js"></script>
-    <script src="areas/cart/cart_route.js"></script>
-    <!--我的->
-    <link href="css/account/account.css" rel="stylesheet">
-    <script src="areas/account/account_controller.js"></script>
-    <script src="areas/account/account_route.js"></script>
-    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
-    <!--最新商品分类-->
-    <link href="css/latestProducts/latestProducts.css" rel="stylesheet">
-    <script src="areas/latestProducts/latestProducts_controller.js"></script>
-    <script src="areas/latestProducts/latestProducts_service.js"></script>
-    <script src="areas/latestProducts/latestProducts_route.js"></script>
-    <!-- <script src="lib/ionic-image-lazy-load/ionic-image-lazy-load.js"></script> -->
-  </head>
-  <body ng-app="starter">
-    <ion-nav-view></ion-nav-view>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>邀请名单</title>
+    <link rel="stylesheet" href="lib/bootstrap/bootstrap.css">
+</head>
+<style>
+    li {
+        float: left;
+    }
+    body {
+        padding-top: 50px;
+    }
+</style>
+<body ng-app="nameList">
+<div ng-controller="MainController">
+    <div class="container" style="background-color:  #edbc80">
+        <div class="row">
+            <center><h1>邀请名单</h1></center>
+        </div>
+        <div class="row" style="padding-top: 30px;">
+            <div class="col-xs-2">
+                <div class="input-group">
+                  <span class="input-group-addon">
+                    姓名
+                  </span>
+                    <input type="text" ng-model="guestInfo.name" class="form-control" placeholder="输入姓名">
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="input-group">
+                  <span class="input-group-addon">
+                    电话
+                  </span>
+                  <input type="text" ng-model="guestInfo.phone" class="form-control" placeholder="输入电话">
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="radio-group">
+                    <span class="radio-group-addon">性别
+                    <input type="radio" ng-model="guestInfo.gender" class="from-control" value="男" ng-checked="true">男
+                    <input type="radio" ng-model="guestInfo.gender" class="from-control" value="女">女
+                    <input type="radio" ng-model="guestInfo.gender" class="from-control" value="未知">未知
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <button ng-click="invite()" class="btn btn-success">邀请</button>
+            </div>
+        </div>
+        <div class="row" style="padding: 20px;">
+            <a href="#!/all" class="btn btn-success btn-xs">显示全部：{{guests.length}}</a>
+            <a href="#!/invite" class="btn btn-success btn-xs">显示邀请中：{{inviteCount()}}</a>
+            <a href="#!/accept" class="btn btn-success btn-xs">显示已接受：{{acceptCount()}}</a>
+            <a href="#!/refuse" class="btn btn-success btn-xs">显示已拒绝：{{refuseCount()}}</a>||
+            <a href="#!/male" class="btn btn-success btn-xs">男性嘉宾：{{maleCount()}}</a>
+            <a href="#!/female" class="btn btn-success btn-xs">女性嘉宾：{{femaleCount()}}</a>
+            <a href="#!/unknown" class="btn btn-success btn-xs">未知性别嘉宾：{{unknownCount()}}</a>
+        </div>
+    <div>
+        <div class="row" style="padding: 15px;">
+            <table class="table table-bordered">
+            <tr>
+                <th>编号</th>
+                <th>姓名</th>
+                <th>电话</th>
+                <th>性别</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            <tr ng-repeat="guest in guests">
+                <td>{{$index+1}}</td>
+                <td>{{guest.name}}</td>
+                <td>{{guest.phone}}</td>
+                <td>{{guest.gender}}</td>
+                <td>{{guest.state}}</td>
+                <td>
+                    <button ng-if="guest.state=='邀请中'" ng-click="guest.accept()" class="btn btn-xs btn-success">接受邀请</button>
+                    <button ng-if="guest.state=='邀请中'" ng-click="guest.refuse()" class="btn btn-xs btn-danger">拒绝邀请</button>
+                    <button ng-click="remove(guest)" class="btn btn-xs btn-default">删除</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+    </div>
+    </div>
+<script src="lib/angular/angular.js"></script>
+<script src="js/ModelService.js"></script>
+<script>
+    var app = angular.module('nameList', ['nameList.model']);
+    app.controller('MainController', function ($scope, $location, modelService) {
+        var state_gender = Guest.ALL;
+        var guestInfo = $scope.guestInfo = {
+            name: '',
+            phone: '',
+            gender:'男'
+        };
+        // 点击邀请按钮，邀请当前嘉宾
+        $scope.invite = function () {
+            var msg = modelService.add(guestInfo.name, guestInfo.phone, guestInfo.gender);
+            guestInfo.name = '';
+            guestInfo.phone = '';
+            guestInfo.gender = '男';
+            switch (msg.code) {
+                case 0: // 0 代表成功
+                    // Model层数据更新之后，把更新同步到ViewModel
+                    $scope.guests = modelService.getList(state_gender);
+                    break;
+                case 1: // 1 代表姓名和电话有问题
+                    alert('请输入正确的姓名和电话。');
+                    break;
+                case 2: // 2 代表嘉宾信息有效合法
+                    alert('嘉宾姓名长度为[2-10]，电话为我国手机号码（11位），请进行验证');
+                    break;
+                case 3: // 3 代表嘉宾信息重复
+                    alert('嘉宾信息有重复，请进行检查');
+                    break;
+            }
+        };
+            // 点击删除按钮，删除对应的嘉宾
+        $scope.remove = function (guest) {
+            modelService.remove(guest);
+            // 更新了模型之后，同步模型上的更新到ViewModel上
+            $scope.guests = modelService.getList(state_gender); 
+        };
+        // 监听$location，完成路由功能，进行列表的筛选
+        $scope.location = $location;
+        $scope.$watch('location.path()', function (newValue) {
+            switch (newValue) {
+                case '/all':
+                state_gender = Guest.ALL;
+                    break;
+                case '/invite':
+                state_gender = Guest.INVITE;
+                    break;
+                case '/accept':
+                state_gender = Guest.ACCEPT;
+                    break;
+                case '/refuse':
+                state_gender = Guest.REFUSE;
+                    break;
+                case '/male':
+                state_gender = '男';
+                    break;
+                case '/female':
+                state_gender = '女';
+                    break;
+                case '/unknown':
+                state_gender = '未知';
+                    break;
+             }
+            // 把数据从模型移动到视图模型。
+            $scope.guests = modelService.getList(state_gender);
+        });
+        //统计各种状态的嘉宾数量
+        $scope.inviteCount = function(){
+            var count = 0;
+            $scope.guests.forEach(function(guest){
+                count += guest.state==Guest.INVITE ? 1 : 0;
+            });
+            return count;
+        }
+        $scope.acceptCount = function(){
+            var count = 0;
+            $scope.guests.forEach(function(guest){
+                count += guest.state==Guest.ACCEPT ? 1 : 0;
+            });
+            return count;
+        }
+        $scope.refuseCount = function(){
+            var count = 0;
+            $scope.guests.forEach(function(guest){
+                count += guest.state==Guest.REFUSE ? 1 : 0;
+            });
+            return count;
+        }
+        $scope.maleCount = function(){
+            var count = 0;
+            $scope.guests.forEach(function(guest){
+                count += guest.gender=='男' ? 1 : 0;
+            });
+            return count;
+        }
+        $scope.femaleCount = function(){
+            var count = 0;
+            $scope.guests.forEach(function(guest){
+                count += guest.gender=='女' ? 1 : 0;
+            });
+            return count;
+        }
+        $scope.unknownCount = function(){
+            var count = 0;
+            $scope.guests.forEach(function(guest){
+                count += guest.gender=='未知' ? 1 : 0;
+            });
+            return count;
+        }
+    });
+</script>
+</body>
 </html>
